@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+// pas prévisible = situation de compétition
 void* read(void* data)
 {
-    int* value = (int*)data;
+    int* value = data;
 
     for (int i = 0; i < 10; i++) {
         printf("Read : %d\n", *value);
@@ -15,7 +16,7 @@ void* read(void* data)
 
 void* write(void* data)
 {
-    int* value = (int*)data;
+    int* value = data;
 
     for (int i = 0; i < 10; i++) {
         (*value)++;
