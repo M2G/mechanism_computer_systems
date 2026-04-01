@@ -9,12 +9,11 @@ void* fn(void* data)
     for (int i = 0; i < 50; i++) {
         printf("Thread N%d %d\n", nom, i);
     }
-
-    return NULL;
 }
 
 int main()
 {
+    // struct
     pthread_t thread1, thread2;
 
     int id1 = 1;

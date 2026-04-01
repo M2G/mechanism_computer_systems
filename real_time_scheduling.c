@@ -30,7 +30,6 @@ void* threadFn(void* arg)
     }
 
     printf("Thread %d END\n", id);
-    return NULL;
 }
 
 int main()

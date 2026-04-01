@@ -10,8 +10,6 @@ void* read(void* data)
     for (int i = 0; i < 10; i++) {
         printf("Read : %d\n", *value);
     }
-
-    return NULL;
 }
 
 void* write(void* data)
@@ -22,8 +20,6 @@ void* write(void* data)
         (*value)++;
         printf("Write : %d\n", *value);
     }
-
-    return NULL;
 }
 
 int main()
