@@ -1,7 +1,7 @@
 // Simple Dynamic Strings (Redis) : gestion de chaînes de caractères dynamiques en C
 
 /*
-* Sources vérifiées
+* Sources :
 * Code source actuel : github.com/redis/redis/blob/unstable/src/sds.h
 * Code source actuel : github.com/redis/redis/blob/unstable/src/sds.c
 * Vrai commit des size classes (2015) : github.com/redis/redis/commit/f15df8ba5db09bdf4be58c53930799d82120cc34
