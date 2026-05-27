@@ -22,4 +22,4 @@ void process(char *s) {
 // The PostgreSQL Patch
 // This is exactly what this patch proposes, submitted to the PostgreSQL developers mailing list in November 2019 by Ranier Vilela : to avoid repeatedly calling "strlen()" within loops in the authentication code ("auth.c").
 // The patch pre-calculates the length of the strings (secret, passwd, ident_query) before the relevant loops.
-// Patch avoid call strlen repeatedly in loop : https://www.postgresql.org/message-id/MN2PR18MB29274AF58676ACB8DDEF90D6E37B0@MN2PR18MB2927.namprd18.prod.outlook.com
+// Patch avoid call strlen repeatedly in loop (line no. 1798) : https://www.postgresql.org/message-id/MN2PR18MB29274AF58676ACB8DDEF90D6E37B0@MN2PR18MB2927.namprd18.prod.outlook.com
