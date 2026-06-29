@@ -21,6 +21,7 @@ public static int binarySearch(int[] a, int key) {
         En Java, ce dépassement ne lève pas d'exception (wtf?) il enroule silencieusement en négatif (modulo 2^32). mid devient alors un nombre négatif,
         ce qui provoque un "ArrayIndexOutOfBoundsException" en l'utilisant comme index ou pire un résultat silencieusement incorrect.
 
+        Pourquoi cela à survécu 9ans :
         ...
 
         */
