@@ -35,10 +35,16 @@ public static int binarySearch(int[] a, int key) {
         int mid = (low + high) >>> 1; // FIX : utilisation de l'opérateur de décalage pour éviter le dépassement
 
         /*
+        l'opérateur >>> est un décalage logique à droite. Même si low + high déborde et donne un nombre négatif,
+        le décalage logique traite les bits comme un entier non signé, ce qui produit le bon résultat.
+        C'est la correction utilisée dans certaines versions internes de la JDK, plus concise, mais moins lisible.
 
-
-
-
+        NOTE :
+        Ce bug illustre une classe entière de vulnérabilités : les "interger overflows" silencieux.
+        En C/C++ un dépassement d'entier signé est un comportement "indéfini" au sens de la norme, ce qui donner lieu à des
+        optimisations du compilateurs qui éliminent des branches de sécurité.
+        En Java, le comportement est défini mais trompeur : le résultat est mathématiqment faux, sans le moindre avertissment.
+        Dans les ceux cas, le danger est l'absence de signal d'alarme.
         */
 
 
@@ -54,3 +60,19 @@ public static int binarySearch(int[] a, int key) {
     }
     return -(low + 1);  // key not found
 }
+
+
+// NOTE:
+// classic binary search bug
+// low + high can overflow before the division
+int mid = (low + high) / 2;
+
+// one fix is to so the match as unsigned
+int mid = ((unsigned int)low + (unsigned int)high) >> 1;
+
+// Java version uses ab unsigned shift
+int mid = (low + high) >>> 1;
+
+// safest approach :
+// avoid adding the two large values together
+int mid = low + ((high - low) / 2);
