@@ -1,57 +1,39 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <vector>
 
-#define ITERATIONS 1000000
-#define NUM_THREADS 2
+constexpr int ITERATIONS = 1000000;
+constexpr int NUM_THREADS = 2;
 
 int sum = 0;
-pthread_mutex_t mutex;
+std::mutex mtx;
 
-// fonction exécutée par chaque thread
-void *increase_sum(void *arg)
+void increase_sum()
 {
     for (int i = 0; i < ITERATIONS; i++)
     {
-        pthread_mutex_lock(&mutex);
+        std::lock_guard<std::mutex> lock(mtx);
         sum++;
-        pthread_mutex_unlock(&mutex);
     }
-    return NULL;
 }
 
-int main(void)
+int main()
 {
-    pthread_t threads[NUM_THREADS];
+    std::vector<std::thread> threads;
 
-    // init du mutex
-    if (pthread_mutex_init(&mutex, NULL) != 0)
-    {
-        perror("Erreur init mutex");
-        return EXIT_FAILURE;
-    }
-
-    // création des threads
     for (int i = 0; i < NUM_THREADS; i++)
     {
-        if (pthread_create(&threads[i], NULL, increase_sum, NULL) != 0)
-        {
-            perror("Erreur création thread");
-            return EXIT_FAILURE;
-        }
+        threads.emplace_back(increase_sum);
     }
 
-    // attente des threads
-    for (int i = 0; i < NUM_THREADS; i++)
+    for (auto& t : threads)
     {
-        pthread_join(threads[i], NULL);
+        t.join();
     }
 
-    // destruction du mutex
-    pthread_mutex_destroy(&mutex);
-
-    printf("Total attendu : %d\n", ITERATIONS * NUM_THREADS);
-    printf("Total obtenu  : %d\n", sum);
+    std::cout << "Total attendu : " << ITERATIONS * NUM_THREADS << "\n";
+    std::cout << "Total obtenu  : " << sum << "\n";
 
     return EXIT_SUCCESS;
 }
