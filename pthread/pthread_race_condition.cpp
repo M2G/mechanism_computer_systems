@@ -1,13 +1,17 @@
 #include <iostream>
 #include <thread>
+//#include <mutex>
 
 int sum = 0;
+//std::mutex mtx;
 
 // augmente la valeur de la variable sum
 void increase_sum()
 {
     for (int i = 0; i < 1000000; i++)
     {
+        // FIX
+        // std::lock_guard<std::mutex> lock(mtx);
         sum++;
     }
 }
