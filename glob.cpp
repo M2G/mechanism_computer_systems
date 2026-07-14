@@ -5,5 +5,10 @@
 
 #include <string_view>
 
-bool match_naive(std::string_view pattern, std::string_view name) {}
+bool match_naive(std::string_view pattern, std::string_view name) {
+    std::size_t px = 0, nx = 0;
+    // while () {}
+
+    return true;
+}
 bool match_linear(std::string_view pattern, std::string_view name) {}
