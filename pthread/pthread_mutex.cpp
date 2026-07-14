@@ -1,28 +1,22 @@
 #include <iostream>
-#include <thread>
-#include <vector>
+#include <future>
 
-#define NUM_THREADS 8
-
-void print_message()
+// fonction qui retourne directement une valeur (pas besoin de malloc/pthread_exit)
+int return_value()
 {
-    std::cout << "Hello from threads\n";
+    return 100;
 }
 
 int main()
 {
-    std::vector<std::thread> threads;
+    // lance la fonction dans un thread et récupère un "future" sur le résultat
+    std::future<int> result = std::async(std::launch::async, return_value);
 
-    for (int i = 0; i < NUM_THREADS; i++)
-    {
-        threads.push_back(std::thread(print_message));
-    }
+    // .get() attend la fin du thread (équivalent du join)
+    // et récupère la valeur retournée
+    int value = result.get();
 
-    for (int i = 0; i < NUM_THREADS; i++)
-    {
-        threads[i].join();
-        std::cout << "Thread ID " << i << " has finished\n";
-    }
+    std::cout << "Returned Value: " << value << std::endl;
 
     return 0;
 }
