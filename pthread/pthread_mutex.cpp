@@ -1,21 +1,12 @@
 #include <iostream>
 #include <thread>
-#include <mutex>
 #include <vector>
 
-constexpr int ITERATIONS = 1000000;
-constexpr int NUM_THREADS = 2;
+#define NUM_THREADS 8
 
-int sum = 0;
-std::mutex mtx;
-
-void increase_sum()
+void print_message()
 {
-    for (int i = 0; i < ITERATIONS; i++)
-    {
-        std::lock_guard<std::mutex> lock(mtx);
-        sum++;
-    }
+    std::cout << "Hello from threads\n";
 }
 
 int main()
@@ -24,16 +15,14 @@ int main()
 
     for (int i = 0; i < NUM_THREADS; i++)
     {
-        threads.emplace_back(increase_sum);
+        threads.push_back(std::thread(print_message));
     }
 
-    for (auto& t : threads)
+    for (int i = 0; i < NUM_THREADS; i++)
     {
-        t.join();
+        threads[i].join();
+        std::cout << "Thread ID " << i << " has finished\n";
     }
 
-    std::cout << "Total attendu : " << ITERATIONS * NUM_THREADS << "\n";
-    std::cout << "Total obtenu  : " << sum << "\n";
-
-    return EXIT_SUCCESS;
+    return 0;
 }
