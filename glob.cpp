@@ -7,7 +7,18 @@
 
 bool match_naive(std::string_view pattern, std::string_view name) {
     std::size_t px = 0, nx = 0;
-    // while () {}
+    while (px < pattern.size() || nx < name.size()) {
+        if (px < pattern.size()) {
+            char c = pattern[px];
+            if (c == '*') {
+                // ...
+            } else if (c == '?') {
+                // ...
+            } else {
+                // ...
+            }
+        }
+    }
 
     return true;
 }
