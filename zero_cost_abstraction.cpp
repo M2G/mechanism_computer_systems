@@ -17,3 +17,19 @@ le code de la fonction cible puisqu'il ne connait pas l'adresse qu'au "runtime".
 - "Branch prediction penalty" les CPU modernes prédisent les branchements/sauts pour maintenir le pipeline plein.
 Un appel direct, le predicteur de branchement indirect (BTB) doit deviner la cible, et se trompe plus souvent, ce qui vide la pipeline (pipeline flush).
  */
+
+// solution C++ "std::sort" lamdba/template
+std::sort(arr.begin(), arr.end(),
+    [](int a, int b) { return a > b; })
+/*
+ std::sort est un template. Le type du comparateur (ici le type de la lambda, qui est unique et généré par le compilateur) fait partie du type du template lui-même.
+
+ Résultat :
+ - Le compilateur connait la fonction exacte à appeler dès la compilation, pas de pointeur de fonction, pas d'indirection).
+ - Il peut donc inliner le corps de la lambda directement dans la bouche de tri.
+ - Une fois inlinée a < b devient simple instruction de comparaison au milieu du code tri. pas d'appel du tout, donc ni cache miss, ni misprediction liés à un appel indirect.
+
+ Le point clé: "zero-cost" :
+ -
+
+*/
