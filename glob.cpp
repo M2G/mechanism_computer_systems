@@ -16,15 +16,19 @@ namespace glob {
             if (px < pattern.size()) {
                 char c = pattern[px];
                 if (c == '*') {
-                    // recursive ?
-                } else if (c == '?') {
-                    if (nx < name.size()) { ++p; ++nx; continue; }
-                    // ...
+                    for (std::size_t k = nx; k < name.size(); ++k) {
+                        if (match_naive(pattern.substr(px + 1), name.substr(k)))
+                            return true;
+                    }
+                    return false;
+                }
+                if (c == '?') {
+                    if (nx < name.size()) { ++px; ++nx; continue; }
                 } else {
-                    if (nx < name.size() && name[nx] == c) { ++p; ++nx; continue; }
-                    // ...
+                    if (nx < name.size() && name[nx] == c) { ++px; ++nx; continue; }
                 }
             }
+            return false;
         }
 
         return true;
