@@ -16,7 +16,7 @@ void *return_value(void *arg)
     pthread_exit((void *)result);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     // variable to store the thread
     pthread_t t1;

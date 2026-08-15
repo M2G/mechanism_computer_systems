@@ -11,7 +11,7 @@ void *print_message(void *arg) // void *(*)(void *)
     return NULL;
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     // variable to store the thread
     pthread_t t1;

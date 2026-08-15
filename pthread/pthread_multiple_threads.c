@@ -13,7 +13,7 @@ void *print_message(void *arg)
     return NULL;
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     // variable to store the thread
     pthread_t threads[NUM_THREADS];
