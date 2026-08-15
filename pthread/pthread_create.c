@@ -1,15 +1,21 @@
-#include <iostream>
-#include <thread>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <pthread.h>
 
-void print_message()
+// just a function which prints statements
+void *print_message(void *arg) // void *(*)(void *)
 {
-    std::cout << "Hello from threads\n";
+    // usleep(100000);
+    printf("Hello from threads\n");
+    return NULL;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    std::thread t1(print_message);
-    t1.detach(); // le thread continue en arrière-plan, indépendamment de main
-
-    return 0; // main se termine, le thread peut ne pas avoir fini : rien ne s'affiche parfois
+    // variable to store the thread
+    pthread_t t1;
+    // thread creation
+    pthread_create(&t1, NULL, &print_message, NULL);
+    return 0;
 }
