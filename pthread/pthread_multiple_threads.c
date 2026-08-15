@@ -1,29 +1,44 @@
-#include <iostream>
-#include <thread>
-#include <vector>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <pthread.h>
 
-#define NUM_THREADS 8
+#define NUM_THREADS 8 // number of threads
 
-void print_message()
+// just a function which prints statements
+void *print_message(void *arg)
 {
-    std::cout << "Hello from threads\n";
+    int id = *(int *)arg;
+    printf("Hello from thread %d\n", id);
+    return NULL;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    std::vector<std::thread> threads;
+    // variable to store the thread
+    pthread_t threads[NUM_THREADS];
+    int ids[NUM_THREADS]; // skip malloc/free, tableau local
 
-    // création des threads
+    // thread creation
     for (int i = 0; i < NUM_THREADS; i++)
     {
-        threads.push_back(std::thread(print_message));
+        ids[i] = i; // assign an ID to each thread
+        if (pthread_create(&threads[i], NULL, &print_message, &ids[i]) != 0)
+        {
+            perror("pthread_create failed");
+            return 1;
+        }
     }
 
-    // attente (join) des threads
+    // thread joining
     for (int i = 0; i < NUM_THREADS; i++)
     {
-        threads[i].join();
-        std::cout << "Thread ID " << i << " has finished\n";
+        if (pthread_join(threads[i], NULL) != 0)
+        {
+            perror("pthread_join failed");
+            return 1;
+        }
+        printf("Thread ID %d has finished\n", i);
     }
 
     return 0;
