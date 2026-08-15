@@ -1,18 +1,52 @@
-#include <iostream>
-#include <future>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <pthread.h>
 
-int return_value()
+// just a function which prints statements
+void *return_value(void *arg)
 {
-    return 100;
+    int *result = malloc(sizeof(int));
+    if (result == NULL)
+    {
+        perror("malloc failed");
+        pthread_exit(NULL);
+    }
+    *result = 100;
+    pthread_exit((void *)result);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    std::future<int> result = std::async(std::launch::async, return_value);
+    // variable to store the thread
+    pthread_t t1;
+    int *result;
+    // thread creation
+    if (pthread_create(&t1, NULL, &return_value, NULL) != 0)
+    {
+        perror("pthread_create failed");
+        return 1;
+    }
+    // wait for the child thread to join main thread
+    // and store the returned value in result
+    if (pthread_join(t1, (void **)&result) != 0)
+    {
+        perror("pthread_join failed");
+        return 1;
+    }
 
-    int value = result.get();
+    if (result != NULL)
+    {
+        printf("Returned Value: %d\n", *result);
+        free(result);
+    }
+    else
+    {
+        printf("Thread failed to produce a result\n");
+    }
 
-    std::cout << "Returned Value: " << value << std::endl;
+    // destroy the result variable
+    free(result);
 
     return 0;
 }
