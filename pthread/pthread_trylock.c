@@ -1,35 +1,76 @@
-#include <iostream>
-#include <thread>
-#include <mutex>
-#include <chrono>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <time.h>
+#include <string.h>
 
 #define NUM_THREADS 10
 
-std::mutex mtx; // remplace pthread_mutex_t
+pthread_mutex_t mutex;
 
-void try_lock(int threadID)
+void *try_lock(void *arg)
 {
-    // le thread dort un temps aléatoire entre 0 et 2 secondes
-    int sleeptime = rand() % 3;
-    std::this_thread::sleep_for(std::chrono::seconds(sleeptime));
+    int threadID = *(int *)arg;
 
-    // si le thread obtient le verrou
-    if (mtx.try_lock())
+    // sleep aléatoire entre 0 et 2 secondes
+    unsigned int seed = (unsigned int)time(NULL) ^ threadID; // seed différent par thread
+    int sleeptime = rand_r(&seed) % 3;
+    sleep(sleeptime);
+
+    if (pthread_mutex_trylock(&mutex) == 0)
     {
-        std::cout << "Thread " << threadID << " got the lock!\n";
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        mtx.unlock();
+        printf("Thread %d got the lock!\n", threadID);
+        sleep(1);
+        pthread_mutex_unlock(&mutex);
     }
-    // si le thread n'obtient pas le verrou
     else
     {
-        std::cout << "Thread " << threadID << " did not get the lock!\n";
+        printf("Thread %d did not get the lock!\n", threadID);
     }
+
+    free(arg);
+    return NULL;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    // std::thread(try_lock, i);
+    pthread_t threads[NUM_THREADS];
 
+    if (pthread_mutex_init(&mutex, NULL) != 0)
+    {
+        perror("mutex init failed");
+        return 1;
+    }
+
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        int *x = malloc(sizeof(int));
+        if (x == NULL)
+        {
+            perror("malloc failed");
+            return 1;
+        }
+        *x = i;
+
+        int rc = pthread_create(&threads[i], NULL, &try_lock, x);
+        if (rc != 0)
+        {
+            fprintf(stderr, "pthread_create failed: %s\n", strerror(rc));
+            free(x);
+            return 1;
+        }
+    }
+
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        int rc = pthread_join(threads[i], NULL);
+        if (rc != 0)
+        {
+            fprintf(stderr, "pthread_join failed: %s\n", strerror(rc));
+        }
+    }
+
+    pthread_mutex_destroy(&mutex);
     return 0;
 }
