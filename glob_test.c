@@ -1,28 +1,21 @@
+#define _POSIX_C_SOURCE 200809L
 /*
- * glob_test.cpp : Tests unit.  glob::match_naive /
- *                 glob::match_linear.
- *
- * Usage :
- *   ./glob_test [max_n] [name_len]
- *   ./glob_test 12 100     # défaut
+ * glob_test.c : Tests unitaires pour glob_match_naive et glob_match_linear.
  */
 
-#include "glob.hpp"
+#include "glob.h"
+#include <stdio.h>
 
-#include <chrono>
-#include <string>
-#include <vector>
+// TU
+typedef struct {
+    const char *pattern;
+    const char *name;
+    bool        expected;
+} TestCase;
 
-// Tests unitaires
-struct TestCase {
-    std::string_view pattern;
-    std::string_view name;
-    bool expected;
-};
-
-static int run_unit_tests()
+static int run_unit_tests(void)
 {
-    const std::vector<TestCase> cases = {
+    static const TestCase cases[] = {
         {"a",            "a",               true},
         {"a",            "b",               false},
         {"*",            "",                true},
@@ -33,7 +26,7 @@ static int run_unit_tests()
         {"a?c",          "abc",             true},
         {"a?c",          "ac",              false},
         {"a*bx*cy*d",    "a123bx456cy789d", true},
-        {"a*bx*cy*d",    "abxbxcyd",        true},   // piège : premier bx, pas le second
+        {"a*bx*cy*d",    "abxbxcyd",        true},  //  NB: piège : premier bx
         {"a*bx*cy*d",    "a_cy_d",          false},
         {"*a*a*a*a*b",   "aaaaaaaaaaaab",   true},
         {"*a*a*a*a*b",   "aaaaaaaaaaaac",   false},
@@ -41,29 +34,29 @@ static int run_unit_tests()
         {"",             "x",               false},
         {"abc",          "",                false},
     };
-
+    int n = (int)(sizeof(cases) / sizeof(cases[0]));
     int failures = 0;
-    for (const auto& tc : cases) {
-        bool rn = glob::match_naive (tc.pattern, tc.name);
-        bool rl = glob::match_linear(tc.pattern, tc.name);
-        bool ok = (rn == tc.expected) && (rl == tc.expected);
-        std::printf("[%s] pattern=%-18.*s name=%-16.*s attendu=%-5s naive=%-5s linear=%-5s\n",
+
+    for (int i = 0; i < n; ++i) {
+        bool rn = glob_naive (cases[i].pattern, cases[i].name);
+        bool rl = glob_linear(cases[i].pattern, cases[i].name);
+        bool ok = (rn == cases[i].expected) && (rl == cases[i].expected);
+        printf("[%s] pattern=%-18s name=%-16s attendu=%-5s naive=%-5s linear=%-5s\n",
             ok ? "OK" : "FAIL",
-            (int)tc.pattern.size(), tc.pattern.data(),
-            (int)tc.name.size(),    tc.name.data(),
-            tc.expected ? "true" : "false",
-            rn          ? "true" : "false",
-            rl          ? "true" : "false");
+            cases[i].pattern,
+            cases[i].name,
+            cases[i].expected ? "true" : "false",
+            rn                ? "true" : "false",
+            rl                ? "true" : "false");
         if (!ok) ++failures;
     }
-    std::printf("\n%d/%d tests réussis\n",
-        (int)cases.size() - failures, (int)cases.size());
+    printf("\n%d/%d tests réussis\n", n - failures, n);
     return failures;
 }
 
 int main()
 {
-    std::printf("=== Tests unitaires ===\n");
+    printf("=== Tests unitaires ===\n");
     int failures = run_unit_tests();
 
     return failures ? 1 : 0;
