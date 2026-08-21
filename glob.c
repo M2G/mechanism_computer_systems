@@ -12,7 +12,7 @@ bool glob_match_naive(const char *pattern, size_t plen,
             char c = pattern[px];
             if (c == '*') {
                 for (size_t k = nx; k <= nlen; k++) {
-                    // recursive
+                    if (glob_match_naive(pattern + px + 1, plen - px - 1, name + k, nlen - k)) return true;
                 }
                 return false;
             }
