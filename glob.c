@@ -3,8 +3,29 @@
 #include <string.h>
 
 bool glob_match_naive(const char *pattern, size_t plen,
-                      const char *name,    size_t nlen)
-{}
+                      const char *name,    size_t nlen) {
+
+    size_t px = 0, nx = 0;
+
+    while (px < plen || nx < nlen) {
+        if (px < len) {
+            char c = pattern[px];
+            if (c == '*') {
+                for (size_t k = nx; k <= nlen; k++) {
+                    // recursive
+                }
+                return false;
+            }
+            if (c == '?') {
+                //...
+            } else {
+                // ...
+            }
+        }
+        return false;
+    }
+    return true;
+}
 
 bool glob_match_linear(const char *pattern, size_t plen,
                        const char *name,    size_t nlen)
