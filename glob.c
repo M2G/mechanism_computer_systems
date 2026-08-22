@@ -8,7 +8,7 @@ bool glob_match_naive(const char *pattern, size_t plen,
     size_t px = 0, nx = 0;
 
     while (px < plen || nx < nlen) {
-        if (px < len) {
+        if (px < plen) {
             char c = pattern[px];
             if (c == '*') {
                 for (size_t k = nx; k <= nlen; k++) {
@@ -17,9 +17,17 @@ bool glob_match_naive(const char *pattern, size_t plen,
                 return false;
             }
             if (c == '?') {
-                //...
+                if (nx < nlen) {
+                    ++px;
+                    ++nx;
+                    continue;
+                }
             } else {
-                // ...
+                if (nx < nlen && name[nx] == c) {
+                    ++px;
+                    ++nx;
+                    continue;
+                }
             }
         }
         return false;
