@@ -64,6 +64,8 @@ bool glob_match_linear(const char *pattern, size_t plen,
                     continue;
                 }
             }
+            // if have_star = true
+            // ...
         }
         return false;
     }
