@@ -36,8 +36,25 @@ bool glob_match_naive(const char *pattern, size_t plen,
 }
 
 bool glob_match_linear(const char *pattern, size_t plen,
-                       const char *name,    size_t nlen)
-{}
+                       const char *name,    size_t nlen) {
+    size_t px = 0, nx = 0;
+    size_t next_px = 0, next_nx = 0;
+    bool have_star = false;
+    while (px < plen || nx < nlen) {
+        if (px < plen) {
+            char c = pattern[px];
+            if (c == '*') {
+                next_px = px;
+                next_nx = nx + 1;
+                have_star = true;
+                ++px;
+                continue;
+            }
+        }
+        return false;
+    }
+    return true;
+}
 
 bool glob_naive(const char *pattern, const char *name)
 {
