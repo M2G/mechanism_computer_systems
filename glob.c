@@ -41,6 +41,7 @@ bool glob_match_linear(const char *pattern, size_t plen,
     size_t px = 0, nx = 0;
     size_t next_px = 0, next_nx = 0;
     bool have_star = false;
+
     while (px < plen || nx < nlen) {
         if (px < plen) {
             char c = pattern[px];
@@ -65,11 +66,15 @@ bool glob_match_linear(const char *pattern, size_t plen,
                     continue;
                 }
             }
-            if (have_star) {
-                printf("have_star");
-            }
-            // if have_star = true
-            // ...
+        }
+        if (have_star && next_nx <= nlen) {
+            printf("have_star");
+            printf("next_nx %d", (unsigned long)next_nx);
+            printf("nlen %d", (unsigned long)nlen);
+            // holly fck do same and reverse (like '*')
+            px = next_px;
+            nx = next_nx;
+            continue;
         }
         return false;
     }
