@@ -50,6 +50,20 @@ bool glob_match_linear(const char *pattern, size_t plen,
                 ++px;
                 continue;
             }
+            // same logic
+            if (c == '?') {
+                if (nx < nlen) {
+                    ++px;
+                    ++nx;
+                    continue;
+                }
+            } else {
+                if (nx < nlen && name[nx] == c) {
+                    ++px;
+                    ++nx;
+                    continue;
+                }
+            }
         }
         return false;
     }
