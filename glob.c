@@ -1,6 +1,7 @@
 #include "glob.h"
 
 #include <string.h>
+#include <stdio.h>
 
 bool glob_match_naive(const char *pattern, size_t plen,
                       const char *name,    size_t nlen) {
@@ -63,6 +64,9 @@ bool glob_match_linear(const char *pattern, size_t plen,
                     ++nx;
                     continue;
                 }
+            }
+            if (have_star) {
+                printf("have_star");
             }
             // if have_star = true
             // ...
