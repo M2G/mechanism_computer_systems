@@ -1,3 +1,26 @@
+/*
+This program creates shows how to create and join multiple threads
+using a for loop.
+
+Expected Output:
+Hello from threads
+Hello from threads
+Thread ID 0 has finished
+Thread ID 1 has finished
+Thread ID 2 has finished
+Thread ID 3 has finished
+Hello from threads
+Hello from threads
+Hello from threads
+Hello from threads
+Hello from threads
+Hello from threads
+Thread ID 4 has finished
+Thread ID 5 has finished
+Thread ID 6 has finished
+Thread ID 7 has finished
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
