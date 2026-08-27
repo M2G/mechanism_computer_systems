@@ -1,3 +1,27 @@
+/*
+This program demonstrates a race condition on a shared global variable.
+
+Two threads are created, both running the function increase_sum(),
+which increments the global variable "sum" 1,000,000 times in a loop.
+Because both threads read and write "sum" concurrently without any
+synchronization, individual increments can be lost: one thread may
+overwrite an update made by the other before it gets applied, since
+"sum++" is not an atomic operation (it involves a read, an increment,
+and a write).
+
+As a result, the final value of "sum" is unpredictable and will
+typically be less than the mathematically expected 2,000,000
+(the sum of both threads' increments). The exact value varies
+between runs, depending on how the OS scheduler interleaves
+the two threads.
+
+Expected Output:
+The total should be 2000000
+The total sum is 1149022
+
+(the sum in the second line will vary between runs).
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
