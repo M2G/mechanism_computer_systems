@@ -1,3 +1,13 @@
+/*
+This program creates a new thread by calling pthread_create() function,
+and then the new thread executes the function print_message().
+The program waits for the thread to finish execution using pthread_join()
+
+Expected Output:
+Hello from threads
+
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
