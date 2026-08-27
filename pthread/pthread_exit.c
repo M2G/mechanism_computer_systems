@@ -1,3 +1,10 @@
+/*
+This program creates a new thread which calls the function return_value()
+and stores the return value in main
+
+Expected output:
+Returned Value: 100
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
