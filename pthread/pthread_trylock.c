@@ -1,3 +1,19 @@
+/*
+This program illustrates how to use try lock.
+
+Expected Output:
+Thread 8 did not get the lock!
+Thread 7 did not get the lock!
+Thread 2 did not get the lock!
+Thread 0 did not get the lock!
+Thread 9 did not get the lock!
+Thread 3 did not get the lock!
+Thread 6 did not get the lock!
+Thread 5 did not get the lock!
+Thread 4 got the lock!
+Thread 1 did not get the lock!
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
