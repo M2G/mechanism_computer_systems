@@ -1,3 +1,11 @@
+/*
+This program illustrates how to use mutex to avoid race conditions.
+
+Expected Output:
+The total should be 2000000
+The total sum is 2000000
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
